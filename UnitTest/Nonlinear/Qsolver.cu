@@ -81,7 +81,7 @@ int main(){
     Qreal alpha = 0.2;
     Qreal Re = 0.1;
     Qreal Er = 0.1;
-    int Nx = 8;
+    int Nx = 512;
     int Ny = Nx;
     int BSZ = 16;
     int Nxh = Nx/2+1;
@@ -151,11 +151,6 @@ int main(){
     field_visual(phys_h, "Ra.csv", Nx, Ny);
 
     nl0exact(phys_h, Nx, Ny, dx, dy);
-    cudaMemcpy(aux->phys, phys_h, physize, cudaMemcpyHostToDevice);
-    FwdTrans(aux->spec, aux->phys, mesh);
-    cout << "pideriv" << endl;
-    cudaMemcpy(spec_h, aux->spec, specsize, cudaMemcpyDeviceToHost);
-    print_spec(spec_h, Nxh, Ny);
     field_visual(phys_h, "nl0e.csv", Nx, Ny);
 
     nl1exact(phys_h, Nx, Ny, dx, dy);
@@ -167,7 +162,15 @@ int main(){
     // FldSet<<<mesh->dimGridp, mesh->dimBlockp>>>(wold->phys, 0.0, Nx, Ny, BSZ);
     // FldSet<<<mesh->dimGridp, mesh->dimBlockp>>>(r1old->phys, 0.0, Nx, Ny, BSZ);
     // FldSet<<<mesh->dimGridp, mesh->dimBlockp>>>(r2old->phys, 0.0, Nx, Ny, BSZ);
-
+    // for (int i=0; i<100; i++){
+    //     wnonl_func(wnonl, wold, u, v, r1old, r2old, Ra, S, p11, p12, p21, Re, Er, lambda, aux, aux1);
+    //     BwdTrans(wnonl->phys, wnonl->spec, mesh);
+    //     r1nonl_func(r1nonl, wold, u, v, r1old, r2old, S, lambda, aux, aux1);
+    //     BwdTrans(r1nonl->phys, r1nonl->spec, mesh);
+    //     r2nonl_func(r2nonl, wold, u, v, r1old, r2old, S, lambda, aux, aux1);
+    //     BwdTrans(r2nonl->phys, r2nonl->spec, mesh);
+    //     cout << i << endl;
+    // }
     wnonl_func(wnonl, wold, u, v, r1old, r2old, Ra, S, p11, p12, p21, Re, Er, lambda, aux, aux1);
     BwdTrans(wnonl->phys, wnonl->spec, mesh);
     cudaMemcpy(phys_h, wnonl->phys, physize, cudaMemcpyDeviceToHost);
@@ -183,59 +186,59 @@ int main(){
     cudaMemcpy(phys_h, r2nonl->phys, physize, cudaMemcpyDeviceToHost);
     field_visual(phys_h, "nl2.csv", Nx, Ny);
 
-    p11func(p11, r1old, S, Ra, lambda);
-    BwdTrans(p11->phys,p11->spec,mesh);
-    cudaMemcpy(phys_h, p11->phys, physize, cudaMemcpyDeviceToHost);
-    field_visual(phys_h, "p11.csv", Nx, Ny);
+    // p11func(p11, r1old, S, Ra, lambda);
+    // BwdTrans(p11->phys,p11->spec,mesh);
+    // cudaMemcpy(phys_h, p11->phys, physize, cudaMemcpyDeviceToHost);
+    // field_visual(phys_h, "p11.csv", Nx, Ny);
 
-    p12func(p12, r1old, r2old, S, Ra, lambda, aux, aux1);
-    BwdTrans(p12->phys,p12->spec,mesh);
-    cudaMemcpy(phys_h, p12->phys, physize, cudaMemcpyDeviceToHost);
-    field_visual(phys_h, "p12.csv", Nx, Ny);
+    // p12func(p12, r1old, r2old, S, Ra, lambda, aux, aux1);
+    // BwdTrans(p12->phys,p12->spec,mesh);
+    // cudaMemcpy(phys_h, p12->phys, physize, cudaMemcpyDeviceToHost);
+    // field_visual(phys_h, "p12.csv", Nx, Ny);
 
-    p21func(p21, r1old, r2old, S, Ra, lambda, aux, aux1);
-    BwdTrans(p21->phys,p21->spec,mesh);
-    cudaMemcpy(phys_h, p21->phys, physize, cudaMemcpyDeviceToHost);
-    field_visual(phys_h, "p21.csv", Nx, Ny);
+    // p21func(p21, r1old, r2old, S, Ra, lambda, aux, aux1);
+    // BwdTrans(p21->phys,p21->spec,mesh);
+    // cudaMemcpy(phys_h, p21->phys, physize, cudaMemcpyDeviceToHost);
+    // field_visual(phys_h, "p21.csv", Nx, Ny);
 
-    FldSet<<<mesh->dimGridp, mesh->dimBlockp>>>(wnonl->phys, 0.0, Nx, Ny, BSZ);
-    FwdTrans(wnonl->spec, wnonl->phys, mesh);
-    PiDeriv<<<mesh->dimGridsp, mesh->dimBlocksp>>>(wnonl->spec, p12->spec, p11->spec, p21->spec, mesh->kx, mesh->ky, Er, Re, Nxh, Ny, BSZ);
-    BwdTrans(wnonl->phys, wnonl->spec, mesh);
-    cudaMemcpy(phys_h, wnonl->phys, physize, cudaMemcpyDeviceToHost);
-    field_visual(phys_h, "PiDeriv.csv", Nx, Ny);
+    // FldSet<<<mesh->dimGridp, mesh->dimBlockp>>>(wnonl->phys, 0.0, Nx, Ny, BSZ);
+    // FwdTrans(wnonl->spec, wnonl->phys, mesh);
+    // PiDeriv<<<mesh->dimGridsp, mesh->dimBlocksp>>>(wnonl->spec, p12->spec, p11->spec, p21->spec, mesh->kx, mesh->ky, Er, Re, Nxh, Ny, BSZ);
+    // BwdTrans(wnonl->phys, wnonl->spec, mesh);
+    // cudaMemcpy(phys_h, wnonl->phys, physize, cudaMemcpyDeviceToHost);
+    // field_visual(phys_h, "PiDeriv.csv", Nx, Ny);
 
-    Field* tmp = new Field(mesh);
-    Field* tmp1 = new Field(mesh);
-    xDeriv(tmp->spec, p11->spec,mesh);
-    xDeriv(tmp->spec, tmp->spec, mesh);
+    // Field* tmp = new Field(mesh);
+    // Field* tmp1 = new Field(mesh);
+    // xDeriv(tmp->spec, p11->spec,mesh);
+    // xDeriv(tmp->spec, tmp->spec, mesh);
 
-    yDeriv(tmp1->spec, p21->spec,mesh);
-    yDeriv(tmp1->spec, tmp->spec, mesh);
+    // yDeriv(tmp1->spec, p21->spec,mesh);
+    // yDeriv(tmp1->spec, tmp->spec, mesh);
 
-    SpecAdd<<<mesh->dimGridsp, mesh->dimBlocksp>>>(tmp->spec, 1.0/(Re*Er), tmp->spec, -1.0/(Re*Er), tmp1->spec, Nxh, Ny, BSZ);
-    xDeriv(tmp1->spec, p11->spec,mesh);
-    yDeriv(tmp1->spec, tmp->spec, mesh);
-    SpecAdd<<<mesh->dimGridsp, mesh->dimBlocksp>>>(tmp->spec, 1.0, tmp->spec, -2.0/(Re*Er), tmp1->spec, Nxh, Ny, BSZ);
-    BwdTrans(tmp->phys, tmp->spec, mesh);
-    cudaMemcpy(phys_h, tmp->phys, physize, cudaMemcpyDeviceToHost);
-    field_visual(phys_h, "PiDeriv1.csv", Nx, Ny);
-    cudaMemcpy(spec_h, wnonl->spec, specsize, cudaMemcpyDeviceToHost);
-    print_spec(spec_h, Nxh, Ny);
-    cudaMemcpy(spec_h, tmp->spec, specsize, cudaMemcpyDeviceToHost);
-    print_spec(spec_h, Nxh, Ny);
+    // SpecAdd<<<mesh->dimGridsp, mesh->dimBlocksp>>>(tmp->spec, 1.0/(Re*Er), tmp->spec, -1.0/(Re*Er), tmp1->spec, Nxh, Ny, BSZ);
+    // xDeriv(tmp1->spec, p11->spec,mesh);
+    // yDeriv(tmp1->spec, tmp->spec, mesh);
+    // SpecAdd<<<mesh->dimGridsp, mesh->dimBlocksp>>>(tmp->spec, 1.0, tmp->spec, -2.0/(Re*Er), tmp1->spec, Nxh, Ny, BSZ);
+    // BwdTrans(tmp->phys, tmp->spec, mesh);
+    // cudaMemcpy(phys_h, tmp->phys, physize, cudaMemcpyDeviceToHost);
+    // field_visual(phys_h, "PiDeriv1.csv", Nx, Ny);
+    // cudaMemcpy(spec_h, wnonl->spec, specsize, cudaMemcpyDeviceToHost);
+    // print_spec(spec_h, Nxh, Ny);
+    // cudaMemcpy(spec_h, tmp->spec, specsize, cudaMemcpyDeviceToHost);
+    // print_spec(spec_h, Nxh, Ny);
 
-    cout << "p11" << endl;
-    cudaMemcpy(spec_h, p11->spec, specsize, cudaMemcpyDeviceToHost);
-    print_spec(spec_h, Nxh, Ny);
+    // cout << "p11" << endl;
+    // cudaMemcpy(spec_h, p11->spec, specsize, cudaMemcpyDeviceToHost);
+    // print_spec(spec_h, Nxh, Ny);
 
-    cout << "p21" << endl;
-    cudaMemcpy(spec_h, p21->spec, specsize, cudaMemcpyDeviceToHost);
-    print_spec(spec_h, Nxh, Ny);
+    // cout << "p21" << endl;
+    // cudaMemcpy(spec_h, p21->spec, specsize, cudaMemcpyDeviceToHost);
+    // print_spec(spec_h, Nxh, Ny);
 
-    cout << "p12" << endl;
-    cudaMemcpy(spec_h, p12->spec, specsize, cudaMemcpyDeviceToHost);
-    print_spec(spec_h, Nxh, Ny);
+    // cout << "p12" << endl;
+    // cudaMemcpy(spec_h, p12->spec, specsize, cudaMemcpyDeviceToHost);
+    // print_spec(spec_h, Nxh, Ny);
 
 
     delete mesh;
