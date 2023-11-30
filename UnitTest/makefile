@@ -14,10 +14,13 @@ ALL_CCFLAGS := -m64    --threads 0 --std=c++11
 # build target rules
 BasicTest.o:BasicTest.cu
 	$(NVCC)  $(INC) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
-
 BasicTest.out:BasicTest.o
 	$(NVCC) $(ALL_LDFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
-#	rm *.csv *.o
+
+Fld.o:Fld.cu
+	$(NVCC)  $(INC) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
+Fld.out:Fld.o
+	$(NVCC) $(ALL_LDFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
 
 # clean
 .PHONY: clean

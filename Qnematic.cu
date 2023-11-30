@@ -12,7 +12,8 @@
 
 #include <Mesh.cuh>
 #include <Qfunctions.cuh>
-#include <Qderiv.cuh>
+#include <QFldfuncs.cuh>
+// #include <Qderiv.cuh>
 
 // #define M_PI 3.141592653589
 
@@ -173,7 +174,7 @@ using namespace std;
 // }
 
 int main(){
-    int Nx = 512;
+    int Nx = 8;
     int Ny = Nx;
     int BSZ = 16;
     int Nxh = Nx/2+1;

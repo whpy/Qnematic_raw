@@ -23,7 +23,7 @@ inline void waveinit(Qreal* kx, Qreal* ky, Qreal* k_squared, int Nxh, int Ny, Qr
 typedef struct Mesh{
     int Nx, Nxh, Ny;
     Qreal Lx, Ly, dx, dy;
-    int specsize, physsize;
+    int specsize, physsize, wavesize;
 
     int BSZ;
     dim3 dimGridp, dimBlockp, dimGridsp, dimBlocksp;
@@ -38,6 +38,7 @@ typedef struct Mesh{
         
         specsize = Nxh*Ny*sizeof(Qcomp);
         physsize = Nx*Ny*sizeof(Qreal);
+        wavesize = Nxh*Ny*sizeof(Qreal);
         cudaMalloc((void**)&spec, specsize);
         cudaMalloc((void**)&phys, physsize);
 
@@ -79,4 +80,19 @@ typedef struct Mesh{
     }
 } Mesh;
 
+typedef struct Field{
+    Qcomp* spec;
+    Qreal* phys;
+    Mesh* mesh;
+
+    Field(Mesh* pmesh):mesh(pmesh){
+        cudaMalloc((void**)&spec, mesh->specsize);
+        cudaMalloc((void**)&phys, mesh->physsize);
+    }
+
+    ~Field(){
+        cudaFree(spec);
+        cudaFree(phys);
+    }
+}Field;
 #endif

@@ -6,10 +6,13 @@
 #include <math.h>
 #include <QActFlowDef.cuh>
 
+
 using std::string;
 using std::endl;
 using std::ofstream;
 using std::cout;
+
+
 
 inline void winit(Qreal* w, int Nx, int Ny, Qreal dx, Qreal dy){
     for (int j = 0; j < Ny; j++){
