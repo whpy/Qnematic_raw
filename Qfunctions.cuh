@@ -14,38 +14,38 @@ using std::cout;
 
 
 
-inline void winit(Qreal* w, int Nx, int Ny, Qreal dx, Qreal dy){
-    for (int j = 0; j < Ny; j++){
-        for (int i = 0; i < Nx; i++){
-            int index = i + j*Nx;
-            Qreal x = i*dx;
-            Qreal y = j*dy;
-            w[index] = -1*sin(x+y);
-        }
-    }
-}
+// inline void winit(Qreal* w, int Nx, int Ny, Qreal dx, Qreal dy){
+//     for (int j = 0; j < Ny; j++){
+//         for (int i = 0; i < Nx; i++){
+//             int index = i + j*Nx;
+//             Qreal x = i*dx;
+//             Qreal y = j*dy;
+//             w[index] = -1*sin(x+y);
+//         }
+//     }
+// }
 
-inline void r1init(Qreal* w, int Nx, int Ny, Qreal dx, Qreal dy){
-    for (int j = 0; j < Ny; j++){
-        for (int i = 0; i < Nx; i++){
-            int index = i + j*Nx;
-            Qreal x = i*dx;
-            Qreal y = j*dy;
-            w[index] = -25*sin(3*x+4*y);
-        }
-    }
-}
+// inline void r1init(Qreal* w, int Nx, int Ny, Qreal dx, Qreal dy){
+//     for (int j = 0; j < Ny; j++){
+//         for (int i = 0; i < Nx; i++){
+//             int index = i + j*Nx;
+//             Qreal x = i*dx;
+//             Qreal y = j*dy;
+//             w[index] = -25*sin(3*x+4*y);
+//         }
+//     }
+// }
 
-inline void r2init(Qreal* w, int Nx, int Ny, Qreal dx, Qreal dy){
-    for (int j = 0; j < Ny; j++){
-        for (int i = 0; i < Nx; i++){
-            int index = i + j*Nx;
-            Qreal x = i*dx;
-            Qreal y = j*dy;
-            w[index] = -25*sin(3*x+4*y);
-        }
-    }
-}
+// inline void r2init(Qreal* w, int Nx, int Ny, Qreal dx, Qreal dy){
+//     for (int j = 0; j < Ny; j++){
+//         for (int i = 0; i < Nx; i++){
+//             int index = i + j*Nx;
+//             Qreal x = i*dx;
+//             Qreal y = j*dy;
+//             w[index] = -25*sin(3*x+4*y);
+//         }
+//     }
+// }
 
 inline void print_spec(Qcomp* f, int Nxh, int Ny){
     for(int j = 0; j < Ny; j++){
