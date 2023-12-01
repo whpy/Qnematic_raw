@@ -33,7 +33,7 @@ typedef struct Mesh{
     Qcomp* spec; Qreal* phys;
     Qreal *kx, *ky, *k_squared;
     Mesh(int pNx, int pNy, Qreal pLx, Qreal pLy, int pBSZ):
-    Nx(pNx),Ny(pNy),Nxh(Nx/2+1),BSZ(pBSZ), Lx(pLx), Ly(pLy)
+    Nx(pNx),Ny(pNy),Nxh(Nx/2+1),BSZ(pBSZ), Lx(pLx), Ly(pLy), dx(pLx/Nx), dy(pLy/Ny)
     {
         
         specsize = Nxh*Ny*sizeof(Qcomp);

@@ -35,7 +35,7 @@ void r1lin_func(Qreal *IFr1, Qreal *IFr1h, Qreal *k_squared, Qreal dt, int Nxh, 
     int j = blockIdx.y * BSZ + threadIdx.y;
     if (i<Nxh && j<Ny){
         int index = i + j*Nxh;
-        Qreal alpha1 = (-1.0*k_squared[index] + 1.0);
+        Qreal alpha1 = (-1.0*k_squared[index] + 0.995);
         IFr1[index] = exp(alpha1*dt);
         IFr1h[index] = exp(alpha1 *dt*0.5);
     }
@@ -47,7 +47,7 @@ void r2lin_func(Qreal *IFr2, Qreal *IFr2h, Qreal *k_squared, Qreal dt, int Nxh, 
     int j = blockIdx.y * BSZ + threadIdx.y;
     if (i<Nxh && j<Ny){
         int index = i + j*Nxh;
-        Qreal alpha2 = (-1.0*k_squared[index] + 1.0);
+        Qreal alpha2 = (-1.0*k_squared[index] + 0.995);
         IFr2[index] = exp(alpha2*dt);
         IFr2h[index] = exp(alpha2 *dt*0.5);
     }
