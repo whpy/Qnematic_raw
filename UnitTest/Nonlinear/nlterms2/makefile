@@ -28,21 +28,7 @@ nlterms1.o:nlterms1.cu
 nlterms1.out:nlterms1.o
 	$(NVCC) $(ALL_LDFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
 
-nlterms2.o:nlterms2.cu
-	$(NVCC)  $(INC) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
-nlterms2.out:nlterms2.o
-	$(NVCC) $(ALL_LDFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
 
-nlterms3.o:nlterms3.cu
-	$(NVCC)  $(INC) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
-nlterms3.out:nlterms3.o
-	$(NVCC) $(ALL_LDFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
-
-nlterms4.o:nlterms4.cu
-	$(NVCC)  $(INC) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
-nlterms4.out:nlterms4.o
-	$(NVCC) $(ALL_LDFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
-	
 # clean
 .PHONY: clean
 clean:
