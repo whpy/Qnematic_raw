@@ -13,9 +13,9 @@ ALL_CCFLAGS := -m64    --threads 0 --std=c++11
 
 # build target rules
 
-Taylor.o:Taylor.cu
+couple.o:couple.cu
 	$(NVCC)  $(INC) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
-Taylor.out:Taylor.o
+couple.out:couple.o
 	$(NVCC) $(ALL_LDFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
 
 
